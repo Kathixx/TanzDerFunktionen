@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_spiel"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.arabellaprivat.tanzderfunktionen.Spiel">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/funktion"
+        android:textAlignment="center"
+        android:textSize="50sp"
+        android:layout_below="@+id/check_level_1"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:text="Prüfen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/pruefen"
+        android:textSize="36sp"
+        android:textAllCaps="false"
+        android:layout_marginBottom="164dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@+id/funktion"
+        android:layout_marginStart="33dp" />
+
+    <Button
+        android:text="i"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/info"
+        android:textAllCaps="false"
+        android:textSize="36sp" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/funktion"
+        android:layout_alignParentStart="true"
+        android:id="@+id/punkte_anzeige"></LinearLayout>
+
+    <TextView
+        android:text="Level"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/level"
+        android:textSize="36sp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:text="Löschen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/loeschen"
+        android:textSize="36sp"
+        android:textAllCaps="false"
+        android:layout_alignBaseline="@+id/pruefen"
+        android:layout_alignBottom="@+id/pruefen"
+        android:layout_toStartOf="@+id/funktion"
+        android:layout_marginEnd="46dp" />
+
+    <Button
+        android:text="Menü"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/funktion"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/menu"
+        android:textAllCaps="false"
+        android:textSize="36sp" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/pruefen"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="104dp"
+        android:id="@+id/bewertung"
+        android:textSize="50sp"
+        android:textAllCaps="true" />
+
+    <Button
+        android:text="Weiter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/bewertung"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/weiter"
+        android:textSize="36sp"
+        android:textAllCaps="false" />
+
+</RelativeLayout>
