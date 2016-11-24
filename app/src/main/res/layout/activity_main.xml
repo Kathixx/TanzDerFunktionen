@@ -22,10 +22,10 @@
         android:textAlignment="center" />
 
     <Button
-        android:text="Start"
+        android:text="Neustart"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/start"
+        android:id="@+id/neustart"
         android:textSize="36sp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
@@ -42,4 +42,16 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="54dp"
         android:textAllCaps="false" />
+
+    <Button
+        android:text="Spiel fortsetzen"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="44dp"
+        android:id="@+id/weiterspielen"
+        android:textSize="36sp"
+        android:textAllCaps="false"
+        android:layout_above="@+id/neustart"
+        android:layout_alignParentStart="true" />
+
 </RelativeLayout>
