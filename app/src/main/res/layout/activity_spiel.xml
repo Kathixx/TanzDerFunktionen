@@ -12,20 +12,20 @@
     tools:context="com.example.arabellaprivat.tanzderfunktionen.Spiel">
 
     <TextView
+        android:id="@+id/funktion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/funktion"
         android:textAlignment="center"
-        android:textSize="50sp"
-        android:layout_below="@+id/check_level_1"
+        android:textSize="30sp"
+        android:textColor="@android:color/holo_blue_bright"
         android:layout_centerHorizontal="true" />
 
     <Button
+        android:id="@+id/pruefen"
         android:text="Prüfen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/pruefen"
-        android:textSize="36sp"
+        android:textSize="25sp"
         android:textAllCaps="false"
         android:layout_marginBottom="164dp"
         android:layout_alignParentBottom="true"
@@ -33,31 +33,31 @@
         android:layout_marginStart="33dp" />
 
     <Button
+        android:id="@+id/info"
         android:text="i"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:id="@+id/info"
         android:textAllCaps="false"
-        android:textSize="36sp" />
+        android:textSize="25sp" />
 
     <TextView
+        android:id="@+id/level"
         android:text="Level"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/level"
-        android:textSize="36sp"
+        android:textSize="25sp"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
         android:layout_marginLeft="10dp" />
 
     <Button
+        android:id="@+id/loeschen"
         android:text="Löschen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/loeschen"
-        android:textSize="36sp"
+        android:textSize="25sp"
         android:textAllCaps="false"
         android:layout_alignBaseline="@+id/pruefen"
         android:layout_alignBottom="@+id/pruefen"
@@ -65,42 +65,53 @@
         android:layout_marginEnd="46dp" />
 
     <Button
+        android:id="@+id/menu"
         android:text="Menü"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/funktion"
         android:layout_alignParentEnd="true"
-        android:id="@+id/menu"
         android:textAllCaps="false"
-        android:textSize="36sp" />
+        android:textSize="15sp" />
 
     <TextView
+        android:id="@+id/bewertung"
         android:text="TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/pruefen"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="104dp"
-        android:id="@+id/bewertung"
         android:textSize="50sp"
         android:textAllCaps="true" />
 
     <Button
+        android:id="@+id/weiter"
         android:text="Weiter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/bewertung"
         android:layout_centerHorizontal="true"
-        android:id="@+id/weiter"
-        android:textSize="36sp"
+        android:textSize="25sp"
         android:textAllCaps="false" />
 
     <ImageView
+        android:id="@+id/punkteanzeige"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:srcCompat="@mipmap/ic_launcher"
         android:layout_below="@+id/funktion"
         android:layout_alignParentStart="true"
-        android:id="@+id/punkteanzeige" />
+         />
+
+    <com.example.arabellaprivat.tanzderfunktionen.Zeichenfläche
+        android:id="@+id/zeichenfläche"
+        android:layout_width="568px"
+        android:layout_height="400px"
+        android:background="@drawable/coordinate_blank"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/menu"
+        android:layout_marginTop="25dp"
+        />
 
 </RelativeLayout>
