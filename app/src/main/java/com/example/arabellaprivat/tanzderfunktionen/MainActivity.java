@@ -6,12 +6,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.util.Log;
 
 /**
  * Startbildschirm
  * wird beim Start der App automatisch aufgerufen
  */
 public class MainActivity extends AppCompatActivity {
+
+    public static final String LOG_TAG = MainActivity.class.getSimpleName();
 
     // IV
     /** Begrüßungstext beim Start der App */
@@ -22,16 +25,23 @@ public class MainActivity extends AppCompatActivity {
     private Button b_anleitung;
     /** setzt das Spiel an dem Punkt fort, wo man aufgehört hat */
     private Button b_weiterspielen;
+    /** legt ein Datenquellen-Objekt an */
+    private Datasource dataSource;
 
     /**
      * wird beim Start der App aufgerufen
      * setzt Layout und Interaktionen fest
+     * legt Datenquellenobjekt an
+     * öffnen und schließen der DBverbindung in lifecyle-callbacks ausgelagert
      * @param savedInstanceState
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Log.d(LOG_TAG, "Das Datenquellen-Objekt wird angelegt.");
+        dataSource = new Datasource(this);
 
         // Variablen belegen
         t_willkommen = (TextView) findViewById(R.id.willkommen);
@@ -101,5 +111,27 @@ public class MainActivity extends AppCompatActivity {
             startActivity(i);
         }
 
+    }
+
+    /**Callback Methode
+     * stellt die Verbindung zur DB her
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        Log.d(LOG_TAG, "Die Datenquelle wird geöffnet.");
+        dataSource.open();
+    }
+
+    /**Callback Methode
+     * schließt die Verbindung zur Datenbank
+     */
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        Log.d(LOG_TAG, "Die Datenquelle wird geschlossen.");
+        dataSource.close();
     }
 }
