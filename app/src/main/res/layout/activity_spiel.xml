@@ -81,8 +81,8 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/pruefen"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="104dp"
-        android:textSize="50sp"
+        android:layout_marginBottom="75dp"
+        android:textSize="25sp"
         android:textAllCaps="true" />
 
     <Button
@@ -104,14 +104,36 @@
         android:layout_alignParentStart="true"
          />
 
-    <com.example.arabellaprivat.tanzderfunktionen.Zeichenfläche
-        android:id="@+id/zeichenfläche"
+    <com.example.arabellaprivat.tanzderfunktionen.Hilfspunkte
+        android:id="@+id/hilfspunkte"
         android:layout_width="568px"
         android:layout_height="400px"
         android:background="@drawable/coordinate_blank"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/menu"
+        android:layout_marginTop="25dp" />
+
+    <com.example.arabellaprivat.tanzderfunktionen.Zeichenfläche
+        android:id="@+id/zeichenfläche"
+        android:layout_width="568px"
+        android:layout_height="400px"
+        android:background="@android:color/transparent"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/menu"
         android:layout_marginTop="25dp"
         />
+
+    <Button
+        android:id="@+id/zeichnen"
+        android:text="Fertig"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        android:textAllCaps="false"
+        android:layout_marginBottom="164dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@+id/funktion"
+        android:layout_marginStart="33dp" />
+
 
 </RelativeLayout>

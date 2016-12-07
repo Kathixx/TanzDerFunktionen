@@ -42,6 +42,10 @@ public class Spiel extends AppCompatActivity {
     /** Liste */
     private Liste listX;
     private Liste listY;
+    /** Touchfläche für Hilfspunkt */
+    private Hilfspunkte h;
+    /** Button um nach dem einzeichnen der HIlfspunkte die Funktion zu zeichnen*/
+    private Button b_zeichnen;
 
 
     @Override
@@ -62,10 +66,17 @@ public class Spiel extends AppCompatActivity {
         z=(Zeichenfläche) findViewById(R.id.zeichenfläche);
         listX= z.getListX();
         listY= z.getListY();
+        h= (Hilfspunkte) findViewById (R.id.hilfspunkte);
+        b_zeichnen=(Button) findViewById(R.id.zeichnen);
 
-        // Bewertungs TextView und Weiter Button sind erstmal unsichtbar
+        // Text reinschreiben
+        t_bewertung.setText("Bitte zeichne deine Hilfspunkte ein");
+
+        //  Weiter Button sind erstmal unsichtbar
         b_weiter.setVisibility(View.INVISIBLE);
-        t_bewertung.setVisibility(View.INVISIBLE);
+        // auch eigentliche View zum Zeichnen der Funktion sowie der Überprüfungsbutton sind unsichtbar
+        z.setVisibility(View.INVISIBLE);
+        b_pruefen.setVisibility(View.INVISIBLE);
 
         // TODO zeigen, in welchem Level wir sind
         // t_level.setText("Level " + (SELECT Level FROM Nutzer));
@@ -89,8 +100,12 @@ public class Spiel extends AppCompatActivity {
         b_loeschen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // löscht die Zeichenfläche
-                z.loescheView();
+
+                // Je nach dem ob gerade Hilfspunkte eingezeichnet werden oder schon die eigentliche Funktion gezeichnet wird
+                // werden unterschiedliche Aktionen von diesem Button hervorgerufen
+                // die Zeichenfläche die Sichtbar ist wird geleert
+                if (z.getVisibility()==View.INVISIBLE)h.loescheView();
+                else z.loescheView();
             }
         });
 
@@ -101,13 +116,32 @@ public class Spiel extends AppCompatActivity {
             }
         });
 
+        b_zeichnen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO View der Hilfspunkte in Bitmap umwandeln
+                Bitmap map= convertViewToBitmap(h);
+                // TODO als HIntergrund Transparent als HIntergrund abspeichern
+                // wie kann  man bitmap als hintergrund bild von anderer View abspeichern??
+                // TODO Zeichenfläche zum Zeichnen der Funktion sichtbar machen ("einschalten")
+                z.setVisibility(View.VISIBLE);
+                // Button für Beenden der Hilfspunkte-setzen ausschalten
+                b_zeichnen.setVisibility(View.INVISIBLE);
+
+                // Button zum Überprüfen der Funktion einschalten
+                b_pruefen.setVisibility(View.VISIBLE);
+                // Text ausblenden
+                t_bewertung.setVisibility(View.INVISIBLE);
+            }
+        });
+
         b_pruefen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // ruft die check-Methode auf, sodass die Funktion geprüft wird
-                // TODO trage das Ergebnis in die Datenbank ein
+                // TODO Level auslesen
                 check(listX, listY, z,t_bewertung, 1);
-
+                // TODO trage das Ergebnis in die Datenbank ein
                 // ändere die Anzeige des Buttons
                 // Löschen und Prüfen Button verschwinden
                 b_loeschen.setVisibility(View.INVISIBLE);
@@ -243,46 +277,50 @@ public class Spiel extends AppCompatActivity {
         String s="";
         // Zähler zählt richtige Vergleiche des gezeichneten und berechneten Wert
         int counter=0;
-        while (index < listLength) {
-            // x-Wert aus der Liste auslesen
-            xWert=(listX.get(index));
-            //s=s+" xP: "+xWert;
-            // in x-Koordinaten-Werte umwandeln
-            xWert=pixelToCoordinate(xWert,z,10);
-            //s=s+" x-K: "+ xWert;
-            // entsprechenden y-Wert mit der Funktion berechnen , Level x zeigt an welche Funktion aufgerufen werden soll
-            // @VICKY + ARABELLA: wie liest man das Level aus??
-            switch (x) {
-                case 1:
-                    yWert = linearFunction(xWert);
-                    // s=s+" y-K: "+yWert;
-                    break;
-                case 2:
-                    yWert = quadratFunction(xWert);
-                    //s=s+" y-K: "+yWert;
-                    break;
-                default:
-                    yWert=0;
+
+        //TODO nur wenn Extremstellen-Check positiv ist, dann wird weiter geprüft
+        if (comparePoints(convertViewToBitmap(h),x)) {
+            while (index < listLength) {
+                // x-Wert aus der Liste auslesen
+                xWert = (listX.get(index));
+                //s=s+" xP: "+xWert;
+                // in x-Koordinaten-Werte umwandeln
+                xWert = pixelToCoordinate(xWert, z, 10);
+                //s=s+" x-K: "+ xWert;
+                // entsprechenden y-Wert mit der Funktion berechnen , Level x zeigt an welche Funktion aufgerufen werden soll
+                // TODO VICKY + ARABELLA: wie liest man das Level aus??
+                switch (x) {
+                    case 1:
+                        yWert = linearFunction(xWert);
+                        // s=s+" y-K: "+yWert;
+                        break;
+                    case 2:
+                        yWert = quadratFunction(xWert);
+                        //s=s+" y-K: "+yWert;
+                        break;
+                    default:
+                        yWert = 0;
+                }
+                // y-Koordinaten-Wert in Pixel umrechnen
+                yWert = coordinateToPixel(yWert, z, 6);
+                //s=s+" y-P: "+yWert;
+                // berechneten y-Wert mit y-Wert aus der Liste vergleichen
+                boolean comparison = compare(yWert, listY, index);
+                //s=s+" yV: "+ listY.get(index)+"\n";
+                // counter hochzählen
+                if (comparison) counter++;
+                // index hochzählen
+                index++;
             }
-            // y-Koordinaten-Wert in Pixel umrechnen
-            yWert=coordinateToPixel(yWert,z,6);
-            //s=s+" y-P: "+yWert;
-            // berechneten y-Wert mit y-Wert aus der Liste vergleichen
-            boolean comparison=compare(yWert,listY,index);
-            //s=s+" yV: "+ listY.get(index)+"\n";
-            // counter hochzählen
-            if (comparison) counter++;
-            // index hochzählen
-            index++;
+
+            // je nach dem wie viele Vergleiche richtig sind wird der gezeichnete Pfad akzeptie
+
+            if (counter > 8)
+                // Ergebnis wird im TextView ausgegeben
+                t.setText("Richtig" + s);
+            else t.setText("Falsch" + s);
+            z.changeBackground(x);
         }
-
-        // je nach dem wie viele Vergleiche richtig sind wird der gezeichnete Pfad akzeptie
-
-        if (counter >8)
-            // Ergebnis wird im TextView ausgegeben
-            t.setText("Richtig"+s);
-        else t.setText("Falsch"+s);
-        z.changeBackground(x);
 
     }
 
@@ -294,7 +332,7 @@ public class Spiel extends AppCompatActivity {
      * @return yWert berechneter y-Wert
      */
     double linearFunction (double x){
-        // @VICKY auslesen aus der Liste
+        // TODO VICKY auslesen aus der Liste
         // Daten evtl. aus Datenbank auslesen
         double yWert=(0.5*x)+2;
         return  round(yWert);
@@ -387,5 +425,29 @@ public class Spiel extends AppCompatActivity {
         if (d>=compareValue-tolerance && d<=compareValue+tolerance ) return true;
         else return false;
     }//Ende compare
+
+//TODO  Umwandlung von View zu Bitmap
+
+    /** Methode
+     * wandelt View in eine Bitmap um
+     * @param v View die umgewandelt werden soll
+     * @return Bitmap
+     */
+    Bitmap convertViewToBitmap (View v){
+        Bitmap map;
+        v.setDrawingCacheEnabled(true);
+        v.buildDrawingCache();
+        return map=v.getDrawingCache();
+    }
+
+    boolean comparePoints (Bitmap map, int x){
+        switch (x){
+            case 1: break;
+            case 2: break;
+            case 3: break;
+
+        }
+        return true;
+    }
 
 }
