@@ -44,6 +44,9 @@ public class Spiel extends AppCompatActivity {
     /** Button um nach dem einzeichnen der HIlfspunkte die Funktion zu zeichnen*/
     private Button b_zeichnen;
 
+    // harcoding level
+    private int level;
+
 
 
     @Override
@@ -68,6 +71,8 @@ public class Spiel extends AppCompatActivity {
         // Text reinschreiben
         t_bewertung.setText("Bitte zeichne deine Hilfspunkte ein");
 
+
+
         //  Weiter Button sind erstmal unsichtbar
         b_weiter.setVisibility(View.INVISIBLE);
         // auch eigentliche View zum Zeichnen der Funktion sowie der Überprüfungsbutton sind unsichtbar
@@ -76,6 +81,7 @@ public class Spiel extends AppCompatActivity {
 
         // TODO zeigen, in welchem Level wir sind
         // t_level.setText("Level " + (SELECT Level FROM Nutzer));
+        level =5;
 
         // Kreise zur Anzeige, wie die Level absolviert wurden
         this.punkteanzeigeZeichnen();
@@ -83,7 +89,8 @@ public class Spiel extends AppCompatActivity {
         // TODO Name der Funktion anzeigen
         // indem die Funktion aus der Datenbank geholt wird
         // t_funktion.setText(SELECT funktion FROM Level WHERE Level = (SELECT Level FROM Nutzer));
-        t_funktion.setText("f(x)=(0.5*x)+2");
+        t_funktion.setText(String.valueOf(level));
+
 
         // Buttons mit Funktion belegen
         b_info.setOnClickListener(new View.OnClickListener() {
@@ -141,7 +148,7 @@ public class Spiel extends AppCompatActivity {
                 // TODO Level auslesen? WO??
                 // die Funktion zum Prüfen der Funktion wird aufgerufen
                 // je nach Ergebnis wird das Ergebnis ausgegeben
-                if (p.check(1)){
+                if (p.check(level)){
                     t_bewertung.setText("Richtig!");}
                 else
                      t_bewertung.setText("Falsch!");
@@ -150,7 +157,7 @@ public class Spiel extends AppCompatActivity {
                 b_weiter.setVisibility(View.VISIBLE);
 
                 //  Korrekturbild soll über die Zeichnung gelegt werden
-                z.changeBackground(1);
+                z.changeBackground(level);
             }
         });
 

@@ -54,34 +54,37 @@ public class Pruefung {
         int counter=0;
 
         //TODO nur wenn Extremstellen-Check positiv ist, dann wird weiter geprüft
-        if (comparePoints(convertViewToBitmap(h),x)) {
+        if (comparePoints(convertViewToBitmap(h),level)) {
             while (index < listLength) {
                 // x-Wert aus der Liste auslesen
                 xWert = (listeX.get(index));
-                //s=s+" xP: "+xWert;
                 // in x-Koordinaten-Werte umwandeln
                 xWert = pixelToCoordinate(xWert, z, 10);
-                //s=s+" x-K: "+ xWert;
                 // entsprechenden y-Wert mit der Funktion berechnen , Level x zeigt an welche Funktion aufgerufen werden soll
                 // TODO VICKY + ARABELLA: wie liest man das Level aus??
-                switch (x) {
+                switch (level) {
                     case 1:
                         yWert = linearFunction(xWert);
-                        // s=s+" y-K: "+yWert;
                         break;
                     case 2:
                         yWert = quadratFunction(xWert);
-                        //s=s+" y-K: "+yWert;
+                        break;
+                    case 3:
+                        yWert = rationalFunction(xWert);
+                        break;
+                    case 4:
+                        yWert= trigonometricFunction(xWert);
+                        break;
+                    case 5:
+                        yWert= logarithmicFunction(xWert);
                         break;
                     default:
                         yWert = 0;
                 }
                 // y-Koordinaten-Wert in Pixel umrechnen
                 yWert = coordinateToPixel(yWert, z, 6);
-                //s=s+" y-P: "+yWert;
                 // berechneten y-Wert mit y-Wert aus der Liste vergleichen
                 boolean comparison = compare(yWert, listeY, index);
-                //s=s+" yV: "+ listY.get(index)+"\n";
                 // counter hochzählen
                 if (comparison) counter++;
                 // index hochzählen
@@ -116,6 +119,38 @@ public class Pruefung {
         return round(yWert);
     }
 
+    /**
+     * gebrochenrationale Funktion: (3)/(x-2)+1
+     * TODO VICKY Datenbank auslesen
+     */
+    private double rationalFunction (double x) {
+        double yWert = 3/(x-2)+1;
+        return round(yWert);
+    }
+
+    /**
+     * trigonometrische Funktion: 3cos(x+1)
+     * TODO VICKY Datenbank auslesen
+     * TODO bei cosinus muss in der Tabelle bereits ein Parameter mit -90 sein, sodass man mit Sinus rechnen kann!
+     */
+    private double trigonometricFunction (double x){
+        //double yWert = 3*Math.sin(x+1);
+        double yWert = 3*Math.cos(x+1);
+        return round (yWert);
+    }
+
+    /**
+     * logharitmische Funktionen: ln(x+5)
+     * TODO VICKY Datenbank auslesen
+     * TODO welche anderen logharitmischen FUnktion gibt es noch? wie könnte man die miteinander vereinbaren?
+     */
+    private double logarithmicFunction (double x){
+        double yWert= Math.log(x+5);
+        return round (yWert);
+    }
+
+
+
 
     /** Methode pixelToCoordinate
      *  rechnet den ausgelesen xWert in Koordinaten-Werte um
@@ -126,7 +161,7 @@ public class Pruefung {
      *  @param xMax   maximaler Wert der x-Achse
      *  @return xWert dieser Wert wird in die Funktion eingesetzt
      */
-    double pixelToCoordinate ( double pixel, Zeichenfläche z, int xMax){
+    private double pixelToCoordinate ( double pixel, Zeichenfläche z, int xMax){
         double xWert;
         // Liest die maximalen Pixelwerte des Views zurück
         //float maxXPixel = v. getRight-getLeft??
@@ -139,16 +174,7 @@ public class Pruefung {
         return  round(xWert);
     }// Ende pixelToCoordinate
 
-    /** Methode round
-     * rundet einen Float-Wert auf 2 Dezimalstellen genau und gibt ihn als Double-Wert zurück
-     * @param f zurundender Float-Wert
-     * @return gerunderter Wert als Double
-     */
-    double round (float f){
-        double rounded=Math.round(f*100);
-        rounded=rounded/100;
-        return rounded;
-    }//Ende round
+
 
     /** Methode round
      * rundet einen Double-Wert auf 2 Dezimalstellen ab
@@ -167,7 +193,6 @@ public class Pruefung {
      * Vorraussetzung: Koordinatensystem ist zentriert
      *
      * @param coordinate  berechnete y-Koordinaten
-     * @param width     maxi
      * @param yMax
      * @return
      */

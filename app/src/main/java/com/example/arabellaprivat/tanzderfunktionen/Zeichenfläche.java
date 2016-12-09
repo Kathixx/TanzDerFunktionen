@@ -46,7 +46,6 @@ public class Zeichenfläche extends View {
         paint.setStrokeJoin(Paint.Join.ROUND);
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(4f);
-
         distance =0;
 
     }
@@ -65,7 +64,7 @@ public class Zeichenfläche extends View {
         switch (event.getAction()){
             case MotionEvent.ACTION_DOWN:
                 // löscht den alten pfad, sobald man neu aufsetzt, d.h. man nochmal zeichnen möchte --> warum löschen button noch?
-                path.reset();
+                //path.reset();
                 path.moveTo(xPos,yPos);
                 return true;
             case MotionEvent.ACTION_MOVE:
@@ -138,9 +137,17 @@ public class Zeichenfläche extends View {
     public void changeBackground(int x){
         switch (x){
             case 1: this.setBackgroundResource(R.drawable.linearfunction);
-                break;
+                    break;
             case 2: this.setBackgroundResource(R.drawable.quadratfunction);
+                    break;
+            case 3: this.setBackgroundResource(R.drawable.rationalfunction);
+                    break;
+            case 4: this.setBackgroundResource(R.drawable.trigfunction);
+                    break;
+            case 5: this.setBackgroundResource(R.drawable.logfunction);
+                    break;
             default: break;
+
 
         }
     }
