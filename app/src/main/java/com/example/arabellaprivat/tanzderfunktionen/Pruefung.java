@@ -1,6 +1,7 @@
 package com.example.arabellaprivat.tanzderfunktionen;
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.view.View;
 import android.widget.TextView;
 
@@ -23,6 +24,7 @@ public class Pruefung {
     /** Levelanzeige */
     private int x;
 
+
     /**
      *Constructor
      */
@@ -43,7 +45,7 @@ public class Pruefung {
     */
 
 
-    boolean check(int level) {
+    int check(int level) {
         double xWert;
         double yWert;
         // index i wird fortlaufend hochgezählt, bis zum Ende der Liste
@@ -54,7 +56,8 @@ public class Pruefung {
         int counter=0;
 
         //TODO nur wenn Extremstellen-Check positiv ist, dann wird weiter geprüft
-        if (comparePoints(convertViewToBitmap(h),level)) {
+        // TODO hier harcoding: Nullstellen aus Level 1: (-4/0)
+        if (comparePoints(convertViewToBitmap(z),-4,0)) {
             while (index < listLength) {
                 // x-Wert aus der Liste auslesen
                 xWert = (listeX.get(index));
@@ -91,9 +94,16 @@ public class Pruefung {
                 index++;
             }
             // je nach dem wie viele Vergleiche richtig sind wird der gezeichnete Pfad akzeptiert
-            return  (counter > 8);
+            // falls richtig wird 1 zurückgegeben
+            if (counter > 8)return 1;
+            // sind die Nullstellen, Extremas, Achsenabschnitt ect richtig und ist nur ungenau gezeichnet worden
+            // dann ist es leider trotzdem falsch und es wird -2 zurückgegeben
+            else return -2;
+
         }
-        else return false;
+        // wenn die Nullstellen, Extremas und Achsenabschnitt nicht richtig gezeichnet wurden wird -1 zurückgegeben
+        else return -1;
+
     }
 
 
@@ -205,6 +215,18 @@ public class Pruefung {
         return yWert;
     } // Ende coordinateToPixel
 
+
+    //berechnet x Koordinate
+    private double xCoordinateToPixel (double coordinate, Zeichenfläche z, float xMax){
+        double xWert;
+        float widthView=z.getRight()-z.getLeft();
+        // nach wie vielen Pixeln kommt 1 x Wert
+        float stepPixels=widthView/(2*xMax);
+        coordinate=xMax+coordinate;
+        xWert=coordinate*stepPixels;
+        return xWert;
+    } // Ende coordinateToPixel
+
     /** Methode compare()
      * vergleicht den mitgegebenen Wert, mit dem Wert an ensprechender Stelle in der Liste
      * in Pixel-Werten
@@ -214,7 +236,7 @@ public class Pruefung {
      * @return true falls Vergleich der zwei Werte übereinstimmt
      */
     private boolean compare (double d, Liste l, int index){
-        double tolerance=50;
+        double tolerance=15;
         float compareValue=l.get(index);
         if (d>=compareValue-tolerance && d<=compareValue+tolerance ) return true;
         else return false;
@@ -227,21 +249,21 @@ public class Pruefung {
      * @param v View die umgewandelt werden soll
      * @return Bitmap
      */
-    private Bitmap convertViewToBitmap (View v){
+     Bitmap convertViewToBitmap (View v){
         Bitmap map;
         v.setDrawingCacheEnabled(true);
         v.buildDrawingCache();
         return map=v.getDrawingCache();
     }
 
-    private boolean comparePoints (Bitmap map, int x){
-        switch (x){
-            case 1: break;
-            case 2: break;
-            case 3: break;
-
-        }
-        return true;
+    boolean comparePoints (Bitmap map, int x, int y){
+        int  xVergleichswert=  (int)xCoordinateToPixel(x, z, 10);
+        int yVergleichswert=  (int)coordinateToPixel(y, z, 6);
+        int pixel=map.getPixel(xVergleichswert, yVergleichswert);
+        // Kontrolle
+        // t.setText("X-WErt: "+x+" Y-Wert: "+y+" ausgerechnete Pixel x: "+ xVergleichswert+" ausgerechnete Pixel y: "+yVergleichswert+" Farbwert: "+pixel);
+        //Wert 0xff000000 entspricht der Farbe Schwarz -16777216
+         return  (pixel==-16777216);
     }
 
 }

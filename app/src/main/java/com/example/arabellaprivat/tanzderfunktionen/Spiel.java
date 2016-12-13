@@ -81,7 +81,7 @@ public class Spiel extends AppCompatActivity {
 
         // TODO zeigen, in welchem Level wir sind
         // t_level.setText("Level " + (SELECT Level FROM Nutzer));
-        level =5;
+        level =1;
 
         // Kreise zur Anzeige, wie die Level absolviert wurden
         this.punkteanzeigeZeichnen();
@@ -148,11 +148,16 @@ public class Spiel extends AppCompatActivity {
                 // TODO Level auslesen? WO??
                 // die Funktion zum Prüfen der Funktion wird aufgerufen
                 // je nach Ergebnis wird das Ergebnis ausgegeben
-                if (p.check(level)){
-                    t_bewertung.setText("Richtig!");}
-                else
-                     t_bewertung.setText("Falsch!");
-
+                if (p.check(level)==1){
+                    t_bewertung.setText("Richtig! \n Herzlichen Glückwunsch, du hast die Funktion richtig gezeichnet. \n Auf ins nächste Level!");}
+                else{
+                    if (p.check(level)==-1) t_bewertung.setText("Falsch! \n Hast du deine Nullstellen, Extremstellen und Achsenabschnitt richtig berechnet? \n " +
+                            "Falls du das nächste Mal Hilfe benötigst, schau doch mal in den Tipps nach, da bekommst du einige gute Hinweise!");
+                    else t_bewertung.setText("Leider Falsch! Du hast zwar die Nullstellen, Extremstellen und Achsenabschnitt richtig berechnet, leider etwas ungenau gezeichnet \n " +
+                            "Zeichne dir doch am Besten das nächste Mal mehr Hilfspunkte ein!");
+                }
+                // Kontrolle
+                // if (p.comparePoints(p.convertViewToBitmap(z),-4,0,t_bewertung));
                 // Button, der zum nächsten Level führt wird sichtbar
                 b_weiter.setVisibility(View.VISIBLE);
 
