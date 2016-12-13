@@ -164,5 +164,39 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * Methode schreibt das aktuelle Level in die zwei vordefinierten Listen parameterList/TextList ein
+     * sodass hinterher mit den Listen gearbeitet werden kann
+     * @param level
+     */
+    public void insertLevelInList (int level){
+         List l=dataSource.getAllEntries();
+        // Level von 1-5 aber Listeneintrag beginnt bei 0 deshalb -1!
+         String s=l.get(level-1).toString();
+         String [] elementArray=s.split(",");
+        // TODO hier müssen wir uns noch eine bessere Methode überlegen
+        // 1. Feld in Parameterliste: 1. Parameter
+        parameterList.add(0,Float.valueOf(elementArray[3]));
+        // 2. Feld in Parameterliste: 2. Parameter
+        parameterList.add(1,Float.valueOf(elementArray[4]));
+        // 3. Feld in Parameterliste: 3. Parameter
+        parameterList.add(0,Float.valueOf(elementArray[5]));
+        // 4. Feld in Parameterliste: ???
+        parameterList.add(0,Float.valueOf(elementArray[6]));
+        // 5. Feld in Parameterliste: ???
+        parameterList.add(0,Float.valueOf(elementArray[7]));
 
+        // 1. Feld in TextListe: ganze Funkiton
+        textList.add(0,elementArray[2]);
+        // 2. Feld in TextListe: Tipp
+        textList.add(0,elementArray[3]);
+    }
+
+    public List <Float> getParameterList (){
+         return parameterList ;
+    }
+
+    public List <String> getTextList (){
+        return textList ;
+    }
 }
