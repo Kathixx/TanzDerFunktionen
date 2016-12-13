@@ -1,4 +1,4 @@
-﻿package com.example.arabellaprivat.tanzderfunktionen;
+package com.example.arabellaprivat.tanzderfunktionen;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
