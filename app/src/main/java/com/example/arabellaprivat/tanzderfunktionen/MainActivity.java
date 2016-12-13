@@ -8,6 +8,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.util.Log;
 
+import java.util.ArrayList;
+
 /**
  * Startbildschirm
  * wird beim Start der App automatisch aufgerufen
@@ -20,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     /** Begrüßungstext beim Start der App */
     private TextView t_willkommen;
     /** Button, mit dem das Spiel gestartet wird */
-    private Button b_neues_spiel;
+    private Button b_start;
     /** Button navigiert zur Anleitung */
     private Button b_anleitung;
     /** setzt das Spiel an dem Punkt fort, wo man aufgehört hat */
@@ -45,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Variablen belegen
         t_willkommen = (TextView) findViewById(R.id.willkommen);
-        b_neues_spiel = (Button) findViewById(R.id.neustart);
+        b_start = (Button) findViewById(R.id.start);
         b_anleitung = (Button) findViewById(R.id.anleitung);
         b_weiterspielen = (Button) findViewById(R.id.weiterspielen);
 
@@ -54,17 +56,17 @@ public class MainActivity extends AppCompatActivity {
         // TODO Abfrage: stehen in der Datenbank irgendwo Werte?
         // if(...){
             b_weiterspielen.setVisibility(View.INVISIBLE);
+            b_start.setText("Neustart");
 
 
         // Begrüßungstext anzeigen
         t_willkommen.setText(R.string.willkommenText);
 
         // Buttonfunktion die das Spiel neu startet erstellen
-        b_neues_spiel.setOnClickListener(new View.OnClickListener(){
+        b_start.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 // TODO Datenbank zurücksetzen
-                // eventuell nur, wenn dort schon Werte drinstehen
                 // in sendMessage wird die neue Activity gestartet
                 sendMessage(v);
             }
@@ -96,13 +98,33 @@ public class MainActivity extends AppCompatActivity {
      */
     public void sendMessage(View view){
         // Spiel neu starten
-        if(view.getId() == R.id.neustart){
+        if(view.getId() == R.id.start){
+            Bundle b = new Bundle();
+
+            // starte in Level 1
+            b.putInt("Level", 1);
+
+            // erstelle eine neue Liste für die Punkte
+            ArrayList<Integer> levelpoints = new ArrayList<>(5);
+            levelpoints.trimToSize();
+            // Liste mit null-Werten füllen
+            for(int i=0; i<5; i++){
+                levelpoints.add(i, null);
+            }
+            b.putIntegerArrayList("Punkte", levelpoints);
             Intent i = new Intent(this, Spiel.class);
+            i.putExtras(b);
             startActivity(i);
         }
         // Spiel weiter spielen
         if(view.getId() == R.id.weiterspielen){
+            Bundle b = new Bundle();
+            // TODO letzten Stand aus der Datenbank holen
+            // Level und die ArrayList mit den Punkten
+            // b.putInt("Level", ...);
+            // b.putIntegerArrayList("Punkte pro Level", ...);
             Intent i = new Intent(this, Spiel.class);
+            i.putExtras(b);
             startActivity(i);
         }
         // Anleitung anzeigen lassen
