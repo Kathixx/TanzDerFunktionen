@@ -165,16 +165,7 @@ public class Spiel extends AppCompatActivity {
                 // die Funktion zum Prüfen der Funktion wird aufgerufen
                 // je nach Ergebnis wird das Ergebnis ausgegeben
 
-                if (p.check(level)==1){
-                    t_bewertung.setText("Richtig! \n Herzlichen Glückwunsch, du hast die Funktion richtig gezeichnet. \n Auf ins nächste Level!");
-                    levelpoints.add(level,1);}
-                else{
-                    if (p.check(level)==-1) t_bewertung.setText("Falsch! \n Hast du deine Nullstellen, Extremstellen und Achsenabschnitt richtig berechnet? \n " +
-                            "Falls du das nächste Mal Hilfe benötigst, schau doch mal in den Tipps nach, da bekommst du einige gute Hinweise!");
-                    else t_bewertung.setText("Leider Falsch! Du hast zwar die Nullstellen, Extremstellen und Achsenabschnitt richtig berechnet, leider etwas ungenau gezeichnet \n " +
-                            "Zeichne dir doch am Besten das nächste Mal mehr Hilfspunkte ein!");
-                    levelpoints.add(level,0);
-                }
+               t_bewertung.setText("Prototyp");
                 // Kontrolle
                 // if (p.comparePoints(p.convertViewToBitmap(z),-4,0,t_bewertung));
 
