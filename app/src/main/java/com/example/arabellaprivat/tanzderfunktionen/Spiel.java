@@ -54,10 +54,6 @@ public class Spiel extends AppCompatActivity {
     private Button b_zeichnen;
 
 
-    // Liste für die Werte aus der Datenbank
-    // Liste mit Parametern für die Funktionen
-    // Liste für
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
