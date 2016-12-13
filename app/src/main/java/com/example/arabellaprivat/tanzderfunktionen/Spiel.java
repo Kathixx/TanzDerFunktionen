@@ -1,4 +1,4 @@
-package com.example.arabellaprivat.tanzderfunktionen;
+﻿package com.example.arabellaprivat.tanzderfunktionen;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -13,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 /**
  * hier fidet das Spiel / das Zeichnen statt
@@ -36,7 +38,14 @@ public class Spiel extends AppCompatActivity {
     private TextView t_funktion;
     /** diese TextView zeigt das aktuelle Level an */
     private TextView t_level;
+    /** zeigt, wie viele Level absolviert wurden */
     private ImageView i_punkteanzeige;
+    /** Level */
+    private int level;
+    /** speichert die Punkte jedes Levels */
+    private ArrayList<Integer> levelpoints;
+    /** Gesamtpunkte */
+    private int score;
     /** Zeichenfläche */
     private Zeichenfläche z;
     /** Touchfläche für Hilfspunkt */
@@ -44,15 +53,21 @@ public class Spiel extends AppCompatActivity {
     /** Button um nach dem einzeichnen der HIlfspunkte die Funktion zu zeichnen*/
     private Button b_zeichnen;
 
-    // harcoding level
-    private int level;
-
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spiel);
+
+        // TODO evtl Level-Variable auf den letzten Stand setzen
+
+        // Intent, das diese Activity geöffnet hat, holen
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        // daraus die übergebenen Daten holen
+        this.level = bundle.getInt("Level");
+        this.levelpoints = bundle.getIntegerArrayList("Punkte");
 
         // Variablen belegen
         b_info = (Button) findViewById(R.id.info);
@@ -64,24 +79,21 @@ public class Spiel extends AppCompatActivity {
         t_funktion = (TextView) findViewById(R.id.funktion);
         t_level = (TextView) findViewById(R.id.level);
         i_punkteanzeige = (ImageView) findViewById(R.id.punkteanzeige);
-        z=(Zeichenfläche) findViewById(R.id.zeichenfläche);
+        z = (Zeichenfläche) findViewById(R.id.zeichenfläche);
         h= (Hilfspunkte) findViewById (R.id.hilfspunkte);
         b_zeichnen=(Button) findViewById(R.id.zeichnen);
 
         // Text reinschreiben
         t_bewertung.setText("Bitte zeichne deine Hilfspunkte ein");
-
-
-
-        //  Weiter Button sind erstmal unsichtbar
+        //  Weiter Button ist erstmal unsichtbar
         b_weiter.setVisibility(View.INVISIBLE);
         // auch eigentliche View zum Zeichnen der Funktion sowie der Überprüfungsbutton sind unsichtbar
         z.setVisibility(View.INVISIBLE);
         b_pruefen.setVisibility(View.INVISIBLE);
 
         // TODO zeigen, in welchem Level wir sind
-        // t_level.setText("Level " + (SELECT Level FROM Nutzer));
-        level =1;
+        t_level.setText("Level " + level);
+
 
         // Kreise zur Anzeige, wie die Level absolviert wurden
         this.punkteanzeigeZeichnen();
@@ -148,16 +160,20 @@ public class Spiel extends AppCompatActivity {
                 // TODO Level auslesen? WO??
                 // die Funktion zum Prüfen der Funktion wird aufgerufen
                 // je nach Ergebnis wird das Ergebnis ausgegeben
+
                 if (p.check(level)==1){
-                    t_bewertung.setText("Richtig! \n Herzlichen Glückwunsch, du hast die Funktion richtig gezeichnet. \n Auf ins nächste Level!");}
+                    t_bewertung.setText("Richtig! \n Herzlichen Glückwunsch, du hast die Funktion richtig gezeichnet. \n Auf ins nächste Level!");
+                    levelpoints.add(level,1);}
                 else{
                     if (p.check(level)==-1) t_bewertung.setText("Falsch! \n Hast du deine Nullstellen, Extremstellen und Achsenabschnitt richtig berechnet? \n " +
                             "Falls du das nächste Mal Hilfe benötigst, schau doch mal in den Tipps nach, da bekommst du einige gute Hinweise!");
                     else t_bewertung.setText("Leider Falsch! Du hast zwar die Nullstellen, Extremstellen und Achsenabschnitt richtig berechnet, leider etwas ungenau gezeichnet \n " +
                             "Zeichne dir doch am Besten das nächste Mal mehr Hilfspunkte ein!");
+                    levelpoints.add(level,0);
                 }
                 // Kontrolle
                 // if (p.comparePoints(p.convertViewToBitmap(z),-4,0,t_bewertung));
+
                 // Button, der zum nächsten Level führt wird sichtbar
                 b_weiter.setVisibility(View.VISIBLE);
 
@@ -185,22 +201,22 @@ public class Spiel extends AppCompatActivity {
         // Style und Farbe hängen von der Bewertung der Level ab
         Paint paint = new Paint();
         // mit einer Schleife gehen wir durch die DB zu den verschiedenen Levels
-        for (int i = 1; i <= 5; i++) {
+        for (int i=0; i <5; i++) {
             // grundsätzlich sind alle Kreise leer mit schwarzer Umrandung
             paint.setColor(Color.BLACK);
             paint.setStyle(Paint.Style.STROKE);
             // wenn das Level bestanden ist
-            // TODO if((SELECT Bewertung FROM Level WHERE Level = i) == 1){
-            // sei der Kreis grün ausgemalt
-            paint.setColor(Color.GREEN);
-            paint.setStyle(Paint.Style.FILL);
-            // }
+            //if(levelpoints.get(i)==1){
+                // sei der Kreis grün ausgemalt
+                paint.setColor(Color.GREEN);
+                paint.setStyle(Paint.Style.FILL);
+            //}
             // wenn das 1. Level nicht bestanden ist
-            // TODO if((SELECT Bewertung FROM Level WHERE Level = i) == 0){
-            // sei der Kreis rot ausgemalt
-            paint.setColor(Color.RED);
-            paint.setStyle(Paint.Style.FILL);
-            // }
+            //if(levelpoints.get(i)==0){
+                // sei der Kreis rot ausgemalt
+                paint.setColor(Color.RED);
+                paint.setStyle(Paint.Style.FILL);
+            //}
             // wenn das 1. Level noch nicht gespielt wurde
             // also wenn in der DB nichts oder null steht
             // bleiben die Einstellungen wie am Anfang
@@ -239,11 +255,17 @@ public class Spiel extends AppCompatActivity {
      */
     public void sendMessage(View view){
         if(view.getId() == R.id.info) {
-            Intent i = new Intent(this, Info.class);
-            startActivity(i);
+            Bundle bundle = new Bundle();
+            bundle.putInt("Level", level);
+            Intent intent = new Intent(this, Info.class);
+            intent.putExtras(bundle);
+            startActivity(intent);
         } else if(view.getId() == R.id.menu) {
-            Intent i = new Intent(this, Menu.class);
-            startActivity(i);
+            Bundle bundle = new Bundle();
+            bundle.putIntegerArrayList("Punkte", levelpoints);
+            Intent intent = new Intent(this, Menu.class);
+            intent.putExtras(bundle);
+            startActivity(intent);
         } else if(view.getId() == R.id.weiter) {
             // TODO wenn wir nicht im 5. Level sind, sondern davor
                 // gehe ins nächste Level
@@ -253,8 +275,11 @@ public class Spiel extends AppCompatActivity {
                 // startActivity(i);
             // TODO wenn wir in Level 5, also am Ende sind
                 // gehe zur Endbewertung
-                Intent i = new Intent(this, Bewertung.class);
-                startActivity(i);
+                Bundle bundle = new Bundle();
+                bundle.putIntegerArrayList("Punkte", levelpoints);
+                Intent intent = new Intent(this, Bewertung.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
         }
     }
 }

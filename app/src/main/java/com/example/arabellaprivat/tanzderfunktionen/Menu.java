@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import java.util.ArrayList;
+
 /**
  * in dieser Klasse wird das Level ausgweählt
  * Anmerkungen / zu erledigen:
@@ -23,11 +25,20 @@ public class Menu extends AppCompatActivity {
     private Button b_level_3;
     private Button b_level_4;
     private Button b_level_5;
+    /** übergibt dasausgewählte Level der Spiel Activity */
+    private Bundle b_new = new Bundle();
+    private ArrayList<Integer> levelpoints;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+
+        // Intent, das diese Activity geöffnet hat holen
+        Intent i_alt = getIntent();
+        Bundle b_alt = i_alt.getExtras();
+        // daraus die übergebenen Daten holen
+        this.levelpoints = b_alt.getIntegerArrayList("Punkte");
 
         // Variablen belegen
         b_level_1 = (Button) findViewById(R.id.level_1);
@@ -39,10 +50,8 @@ public class Menu extends AppCompatActivity {
         b_level_1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO Level 1 auswählen und in die Datenbank als Status schreiben
-                // sowas wie
-                // UPDATE Nutzer SET level=1;
-                // Activity Spiel erneut starten
+                // speicher das Level in einem Bundle
+                b_new.putInt("Level", 1);
                 sendMessage(v);
             }
         }); // Ende onClickListener
@@ -50,8 +59,8 @@ public class Menu extends AppCompatActivity {
         b_level_2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO Level 2 auswählen und in ie Datenbank als Status schreiben
-                // Activity Spiel erneut starten
+                // speicher das Level in einem Bundle
+                b_new.putInt("Level", 2);
                 sendMessage(v);
             }
         });
@@ -59,8 +68,7 @@ public class Menu extends AppCompatActivity {
         b_level_3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO Level 3 auswählen und in ie Datenbank als Status schreiben
-                // Activity Spiel erneut starten
+                b_new.putInt("Level", 3);
                 sendMessage(v);
             }
         });
@@ -68,8 +76,7 @@ public class Menu extends AppCompatActivity {
         b_level_4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO Level 4 auswählen und in ie Datenbank als Status schreiben
-                // Activity Spiel erneut starten
+                b_new.putInt("Level", 4);
                 sendMessage(v);
             }
         });
@@ -77,18 +84,19 @@ public class Menu extends AppCompatActivity {
         b_level_5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO Level 5 auswählen und in ie Datenbank als Status schreiben
-                // Activity Spiel erneut starten
+                b_new.putInt("Level", 5);
                 sendMessage(v);
             }
         });
     }
 
     public void sendMessage(View view) {
+        b_new.putIntegerArrayList("Punkte pro Level", levelpoints);
         // neues Intent
-        Intent i = new Intent(this, Spiel.class);
+        Intent i_new = new Intent(this, Spiel.class);
+        i_new.putExtras(b_new);
         // Activity starten
-        startActivity(i);
+        startActivity(i_new);
     }
 
 }
