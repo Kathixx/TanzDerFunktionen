@@ -10,8 +10,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -106,6 +104,12 @@ public class Spiel extends AppCompatActivity {
         // indem die Funktion aus der Datenbank geholt wird
         // t_funktion.setText(SELECT funktion FROM Level WHERE Level = (SELECT Level FROM Nutzer));
         t_funktion.setText(String.valueOf(level));
+		// Überprüfung der Liste
+		// String text = " ";
+		// for(int i=1; i<=5; i++){
+			// text = text + i + ": " + levelpoints.get(i) + " ";
+		// }
+		// t-funktion.setText(text);
 
 
         // Buttons mit Funktion belegen
@@ -164,8 +168,20 @@ public class Spiel extends AppCompatActivity {
                 // TODO Level auslesen? WO??
                 // die Funktion zum Prüfen der Funktion wird aufgerufen
                 // je nach Ergebnis wird das Ergebnis ausgegeben
+				
+				// richtig und falsch anzeigen
+				if (p.check(level)==1){
+					 t_bewertung.setText("Richtig! \n Herzlichen Glückwunsch, du hast die Funktion richtig gezeichnet. \n Auf ins nächste Level!");
+					 levelpoints.set(level,1);}
+                else{
+                    if (p.check(level)==-1) t_bewertung.setText("Falsch! \n Hast du deine Nullstellen, Extremstellen und Achsenabschnitt richtig berechnet? \n " +
+                            "Falls du das nächste Mal Hilfe benötigst, schau doch mal in den Tipps nach, da bekommst du einige gute Hinweise!");
+                    else t_bewertung.setText("Leider Falsch! Du hast zwar die Nullstellen, Extremstellen und Achsenabschnitt richtig berechnet, leider etwas ungenau gezeichnet \n " +
+                            "Zeichne dir doch am Besten das nächste Mal mehr Hilfspunkte ein!");
+                    levelpoints.set(level,0);
+                }
 
-               t_bewertung.setText("Prototyp");
+               //t_bewertung.setText("Prototyp");
                 // Kontrolle
                 // if (p.comparePoints(p.convertViewToBitmap(z),-4,0,t_bewertung));
 
@@ -196,7 +212,7 @@ public class Spiel extends AppCompatActivity {
         // Style und Farbe hängen von der Bewertung der Level ab
         Paint paint = new Paint();
         // mit einer Schleife gehen wir durch die DB zu den verschiedenen Levels
-        for (int i=0; i <5; i++) {
+        for (int i=1; i <=5; i++) {
             // grundsätzlich sind alle Kreise leer mit schwarzer Umrandung
             paint.setColor(Color.BLACK);
             paint.setStyle(Paint.Style.STROKE);
@@ -262,19 +278,27 @@ public class Spiel extends AppCompatActivity {
             intent.putExtras(bundle);
             startActivity(intent);
         } else if(view.getId() == R.id.weiter) {
-            // TODO wenn wir nicht im 5. Level sind, sondern davor
-                // gehe ins nächste Level
-                // TODO in der Datenbank das nächste Level eintragen
-                // bleibe also im Spiel
-                // Intent i = new Intent(this, Spiel.class);
-                // startActivity(i);
-            // TODO wenn wir in Level 5, also am Ende sind
+            // wenn alle 5 Level gespielt wurden
+            if(levelpoints.get(1) != null && levelpoints.get(2) != null && levelpoints.get(3) != null && levelpoints.get(4) != null && levelpoints.get(5) != null){
                 // gehe zur Endbewertung
                 Bundle bundle = new Bundle();
                 bundle.putIntegerArrayList("Punkte", levelpoints);
                 Intent intent = new Intent(this, Bewertung.class);
                 intent.putExtras(bundle);
                 startActivity(intent);
+            } else {
+                // gehe in das Level, das noch nicht gespielt wurde
+                int counter = 1;
+                while(levelpoints.get(counter) != null)
+                    counter++;
+                level = counter;
+                Bundle bundle = new Bundle();
+                bundle.putIntegerArrayList("Punkte", levelpoints);
+                bundle.putInt("Level", level);
+                Intent intent = new Intent(this, Spiel.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
         }
     }
 }

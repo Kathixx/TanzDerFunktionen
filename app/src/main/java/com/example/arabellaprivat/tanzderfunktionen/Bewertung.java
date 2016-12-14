@@ -136,8 +136,8 @@ public class Bewertung extends AppCompatActivity {
         if(view.getId() == R.id.nochmal) {
             Bundle b = new Bundle();
             // Punkte auf null setzen
-            for(int i=0; i<5; i++) {
-                levelpoints.add(i, null);
+            for(int i=1; i<=5; i++) {
+                levelpoints.set(i, null);
             }
             b.putIntegerArrayList("Punkte", levelpoints);
             b.putInt("Level", 1);

@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         // TODO Abfrage: stehen in der Datenbank irgendwo Werte?
         // if(...){
             b_weiterspielen.setVisibility(View.INVISIBLE);
-            b_start.setText("Neustart");
+            // b_start.setText("Neustart");
 
 
         // Begrüßungstext anzeigen
@@ -112,9 +112,9 @@ public class MainActivity extends AppCompatActivity {
 
             // erstelle eine neue Liste für die Punkte
             ArrayList<Integer> levelpoints = new ArrayList<>(5);
-            levelpoints.trimToSize();
+            // levelpoints.trimToSize();
             // Liste mit null-Werten füllen
-            for(int i=0; i<5; i++){
+            for(int i=0; i<=5; i++){
                 levelpoints.add(i, null);
             }
             b.putIntegerArrayList("Punkte", levelpoints);
