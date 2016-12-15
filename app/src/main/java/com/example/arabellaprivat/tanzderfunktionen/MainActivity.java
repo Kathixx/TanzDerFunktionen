@@ -163,6 +163,4 @@ public class MainActivity extends AppCompatActivity {
         dataSource.close();
     }
 
-
-
 }
