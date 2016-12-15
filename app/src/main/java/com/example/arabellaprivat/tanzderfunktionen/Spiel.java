@@ -98,7 +98,7 @@ public class Spiel extends AppCompatActivity {
         // zeigen, in welchem Level wir sind
         t_level.setText("Level " + level);
 
-        showFunction();
+        //showFunction();
 
         // Kreise zur Anzeige, wie die Level absolviert wurden
         this.visualizeScore();
