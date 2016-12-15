@@ -91,7 +91,7 @@ public class Menu extends AppCompatActivity {
     }
 
     public void sendMessage(View view) {
-        b_new.putIntegerArrayList("Punkte pro Level", levelpoints);
+        b_new.putIntegerArrayList("Punkte", levelpoints);
         // neues Intent
         Intent i_new = new Intent(this, Spiel.class);
         i_new.putExtras(b_new);
