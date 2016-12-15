@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         // Begrüßungstext anzeigen
-        t_willkommen.setText(R.string.willkommenText);
+        t_willkommen.setText("Herzlich Willkommen beim Tanz der Funktionen!");
 
         // Buttonfunktion die das Spiel neu startet erstellen
         b_start.setOnClickListener(new View.OnClickListener(){

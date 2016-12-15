@@ -8,11 +8,13 @@ import android.graphics.Paint;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
-
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * hier fidet das Spiel / das Zeichnen statt
@@ -23,21 +25,21 @@ public class Spiel extends AppCompatActivity {
     /** Info-Button */
     private Button b_info;
     /** Button zum Löschen der View */
-    private Button b_loeschen;
+    private Button b_delete;
     /** Menü Button */
     private Button b_menu;
     /** Button zum prüfen der gemalten Funktion */
-    private Button b_pruefen;
+    private Button b_check;
     /** führt zum nächsten Level oder zur Endbewertung */
-    private Button b_weiter;
+    private Button b_next;
     /** sagt, ob richtig oder falsch gezeichnet wurde */
-    private TextView t_bewertung;
+    private TextView t_result;
     /** zeigt die zu malende Funktion an */
-    private TextView t_funktion;
+    private ListView t_function;
     /** diese TextView zeigt das aktuelle Level an */
     private TextView t_level;
     /** zeigt, wie viele Level absolviert wurden */
-    private ImageView i_punkteanzeige;
+    private ImageView i_score;
     /** Level */
     private int level;
     /** speichert die Punkte jedes Levels */
@@ -49,7 +51,9 @@ public class Spiel extends AppCompatActivity {
     /** Touchfläche für Hilfspunkt */
     private Hilfspunkte h;
     /** Button um nach dem einzeichnen der HIlfspunkte die Funktion zu zeichnen*/
-    private Button b_zeichnen;
+    private Button b_draw;
+
+    List<DatabaseTable_1> data;
 
 
     // Liste für die Werte aus der Datenbank
@@ -62,8 +66,6 @@ public class Spiel extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spiel);
 
-        // TODO evtl Level-Variable auf den letzten Stand setzen
-
         // Intent, das diese Activity geöffnet hat, holen
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
@@ -73,43 +75,38 @@ public class Spiel extends AppCompatActivity {
 
         // Variablen belegen
         b_info = (Button) findViewById(R.id.info);
-        b_loeschen = (Button) findViewById(R.id.loeschen);
+        b_delete = (Button) findViewById(R.id.delete);
         b_menu = (Button) findViewById(R.id.menu);
-        b_pruefen = (Button) findViewById(R.id.pruefen);
-        b_weiter = (Button) findViewById(R.id.weiter);
-        t_bewertung = (TextView) findViewById(R.id.bewertung);
-        t_funktion = (TextView) findViewById(R.id.funktion);
+        b_check = (Button) findViewById(R.id.check);
+        b_next = (Button) findViewById(R.id.next);
+        t_result = (TextView) findViewById(R.id.review);
+        t_function = (ListView) findViewById(R.id.functionText);
         t_level = (TextView) findViewById(R.id.level);
-        i_punkteanzeige = (ImageView) findViewById(R.id.punkteanzeige);
+        i_score = (ImageView) findViewById(R.id.score);
         z = (Zeichenfläche) findViewById(R.id.zeichenfläche);
         h= (Hilfspunkte) findViewById (R.id.hilfspunkte);
-        b_zeichnen=(Button) findViewById(R.id.zeichnen);
+        b_draw=(Button) findViewById(R.id.draw);
 
         // Text reinschreiben
-        t_bewertung.setText("Bitte zeichne deine Hilfspunkte ein");
+        t_result.setText("Bitte zeichne deine Hilfspunkte ein");
         //  Weiter Button ist erstmal unsichtbar
-        b_weiter.setVisibility(View.INVISIBLE);
+        b_next.setVisibility(View.INVISIBLE);
         // auch eigentliche View zum Zeichnen der Funktion sowie der Überprüfungsbutton sind unsichtbar
         z.setVisibility(View.INVISIBLE);
-        b_pruefen.setVisibility(View.INVISIBLE);
+        b_check.setVisibility(View.INVISIBLE);
 
-        // TODO zeigen, in welchem Level wir sind
+        // zeigen, in welchem Level wir sind
         t_level.setText("Level " + level);
 
+        showFunction();
 
         // Kreise zur Anzeige, wie die Level absolviert wurden
-        this.punkteanzeigeZeichnen();
+        this.visualizeScore();
 
         // TODO Name der Funktion anzeigen
         // indem die Funktion aus der Datenbank geholt wird
         // t_funktion.setText(SELECT funktion FROM Level WHERE Level = (SELECT Level FROM Nutzer));
-        t_funktion.setText(String.valueOf(level));
-		// Überprüfung der Liste
-		// String text = " ";
-		// for(int i=1; i<=5; i++){
-			// text = text + i + ": " + levelpoints.get(i) + " ";
-		// }
-		// t-funktion.setText(text);
+        //t_function.setText(String.valueOf(level));
 
 
         // Buttons mit Funktion belegen
@@ -120,7 +117,7 @@ public class Spiel extends AppCompatActivity {
             }
         });
 
-        b_loeschen.setOnClickListener(new View.OnClickListener() {
+        b_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -139,44 +136,43 @@ public class Spiel extends AppCompatActivity {
             }
         });
 
-        b_zeichnen.setOnClickListener(new View.OnClickListener() {
+        b_draw.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Zeichenfläche zum Zeichnen der Funktion sichtbar machen ("einschalten")
                 z.setVisibility(View.VISIBLE);
                 // Button für Beenden der Hilfspunkte-setzen ausschalten
-                b_zeichnen.setVisibility(View.INVISIBLE);
+                b_draw.setVisibility(View.INVISIBLE);
 
                 // Button zum Überprüfen der Funktion einschalten
-                b_pruefen.setVisibility(View.VISIBLE);
+                b_check.setVisibility(View.VISIBLE);
                 // Text ausblenden
-                t_bewertung.setVisibility(View.INVISIBLE);
+                t_result.setVisibility(View.INVISIBLE);
             }
         });
 
-        b_pruefen.setOnClickListener(new View.OnClickListener() {
+        b_check.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Pruefung p= new Pruefung(z, h);
-                // TODO trage das Ergebnis in die Datenbank ein
                 // ändere die Anzeige des Buttons
                 // Löschen und Prüfen Button verschwinden
-                b_loeschen.setVisibility(View.INVISIBLE);
-                b_pruefen.setVisibility(View.INVISIBLE);
+                b_delete.setVisibility(View.INVISIBLE);
+                b_check.setVisibility(View.INVISIBLE);
                 // RICHITG oder FALSCH soll angezeigt werden
-                t_bewertung.setVisibility(View.VISIBLE);
+                t_result.setVisibility(View.VISIBLE);
                 // TODO Level auslesen? WO??
                 // die Funktion zum Prüfen der Funktion wird aufgerufen
                 // je nach Ergebnis wird das Ergebnis ausgegeben
 				
 				// richtig und falsch anzeigen
 				if (p.check(level)==1){
-					 t_bewertung.setText("Richtig! \n Herzlichen Glückwunsch, du hast die Funktion richtig gezeichnet. \n Auf ins nächste Level!");
+					 t_result.setText("Richtig! \n Herzlichen Glückwunsch, du hast die Funktion richtig gezeichnet. \n Auf ins nächste Level!");
 					 levelpoints.set(level,1);}
                 else{
-                    if (p.check(level)==-1) t_bewertung.setText("Falsch! \n Hast du deine Nullstellen, Extremstellen und Achsenabschnitt richtig berechnet? \n " +
+                    if (p.check(level)==-1) t_result.setText("Falsch! \n Hast du deine Nullstellen, Extremstellen und Achsenabschnitt richtig berechnet? \n " +
                             "Falls du das nächste Mal Hilfe benötigst, schau doch mal in den Tipps nach, da bekommst du einige gute Hinweise!");
-                    else t_bewertung.setText("Leider Falsch! Du hast zwar die Nullstellen, Extremstellen und Achsenabschnitt richtig berechnet, leider etwas ungenau gezeichnet \n " +
+                    else t_result.setText("Leider Falsch! Du hast zwar die Nullstellen, Extremstellen und Achsenabschnitt richtig berechnet, leider etwas ungenau gezeichnet \n " +
                             "Zeichne dir doch am Besten das nächste Mal mehr Hilfspunkte ein!");
                     levelpoints.set(level,0);
                 }
@@ -186,14 +182,14 @@ public class Spiel extends AppCompatActivity {
                 // if (p.comparePoints(p.convertViewToBitmap(z),-4,0,t_bewertung));
 
                 // Button, der zum nächsten Level führt wird sichtbar
-                b_weiter.setVisibility(View.VISIBLE);
+                b_next.setVisibility(View.VISIBLE);
 
                 //  Korrekturbild soll über die Zeichnung gelegt werden
                 z.changeBackground(level);
             }
         });
 
-        b_weiter.setOnClickListener(new View.OnClickListener() {
+        b_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 sendMessage(v);
@@ -201,33 +197,42 @@ public class Spiel extends AppCompatActivity {
         });
     }
 
+    private void showFunction() {
+        Datasource source = new Datasource(this);
+        List<DatabaseTable_1> data = source.getAllEntries();
+        ArrayAdapter<DatabaseTable_1> adapter = new ArrayAdapter<DatabaseTable_1>(this, android.R.layout.simple_list_item_1, data);
+        t_function.setAdapter(adapter);
+    }
+
     /**
      * koordiniert das Zeichnen der Punkteanzeige
      * hier werden Zeichen-Eigenschaften gesetzt
      */
-    private void punkteanzeigeZeichnen(){
+    private void visualizeScore(){
         Bitmap bitmap = Bitmap.createBitmap(500, 500, Bitmap.Config.ARGB_8888);
         // der Abstand vom linken Bildschirmrand wird um jew. 15 px erhöht
         int abstand_x = 0;
         // Style und Farbe hängen von der Bewertung der Level ab
         Paint paint = new Paint();
         // mit einer Schleife gehen wir durch die DB zu den verschiedenen Levels
-        for (int i=1; i <=5; i++) {
-            // grundsätzlich sind alle Kreise leer mit schwarzer Umrandung
-            paint.setColor(Color.BLACK);
-            paint.setStyle(Paint.Style.STROKE);
+        for (int i=1; i<=5; i++) {
             // wenn das Level bestanden ist
-            //if(levelpoints.get(i)==1){
-                // sei der Kreis grün ausgemalt
-                paint.setColor(Color.GREEN);
-                paint.setStyle(Paint.Style.FILL);
-            //}
-            // wenn das 1. Level nicht bestanden ist
-            //if(levelpoints.get(i)==0){
+            if(levelpoints.get(i)== null){
+                // grundsätzlich sind alle Kreise leer mit schwarzer Umrandung
+                paint.setColor(Color.BLACK);
+                paint.setStyle(Paint.Style.STROKE);
+            }
+            // wenn das Level nicht bestanden ist
+            else if(levelpoints.get(i)==0){
                 // sei der Kreis rot ausgemalt
                 paint.setColor(Color.RED);
                 paint.setStyle(Paint.Style.FILL);
-            //}
+            }
+            else {
+                // sei der Kreis grün ausgemalt
+                paint.setColor(Color.GREEN);
+                paint.setStyle(Paint.Style.FILL);
+            }
             // wenn das 1. Level noch nicht gespielt wurde
             // also wenn in der DB nichts oder null steht
             // bleiben die Einstellungen wie am Anfang
@@ -256,7 +261,7 @@ public class Spiel extends AppCompatActivity {
         canvas.drawCircle(abstand_x, 5, 5, paint);
 
         // in die ImageView einfügen
-        i_punkteanzeige.setImageBitmap(bitmap);
+        i_score.setImageBitmap(bitmap);
     }
 
     /**
@@ -277,7 +282,7 @@ public class Spiel extends AppCompatActivity {
             Intent intent = new Intent(this, Menu.class);
             intent.putExtras(bundle);
             startActivity(intent);
-        } else if(view.getId() == R.id.weiter) {
+        } else if(view.getId() == R.id.next) {
             // wenn alle 5 Level gespielt wurden
             if(levelpoints.get(1) != null && levelpoints.get(2) != null && levelpoints.get(3) != null && levelpoints.get(4) != null && levelpoints.get(5) != null){
                 // gehe zur Endbewertung

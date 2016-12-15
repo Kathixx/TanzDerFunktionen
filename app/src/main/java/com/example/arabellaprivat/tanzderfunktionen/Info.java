@@ -3,6 +3,8 @@ package com.example.arabellaprivat.tanzderfunktionen;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 /**
@@ -11,7 +13,9 @@ import android.widget.TextView;
 public class Info extends AppCompatActivity {
 
     /** zeigt den Hilfetext an */
-    private TextView t_hilfetext;
+    private TextView t_help;
+    /** schließt die Activity */
+    private Button b_close;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,7 +23,8 @@ public class Info extends AppCompatActivity {
         setContentView(R.layout.activity_info);
 
         // Variablen belegen
-        t_hilfetext = (TextView) findViewById(R.id.hilfetext);
+        t_help = (TextView) findViewById(R.id.help);
+        b_close = (Button) findViewById(R.id.close);
 
         // Intent, das diese Activity geöffnet hat holen
         Intent i = getIntent();
@@ -29,6 +34,14 @@ public class Info extends AppCompatActivity {
         // Text aus der Datenbank holen
         // passend zu dem Level, in dem wir gerade sind
         // sowas wie
-        // t_hilfetext.setText(SELECT tipps FROM level WHERE Level = b.getInt("Level"));
+        // t_help.setText(SELECT tipps FROM level WHERE Level = b.getInt("Level"));
+
+        b_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // schließe diese Activity
+                finish();
+            }
+        });
     }
 }
