@@ -2,17 +2,15 @@ package com.example.arabellaprivat.tanzderfunktionen;
 
 import java.util.ArrayList;
 
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
-
 /**
  * Created by Kathi on 10.11.2016.
  */
 
-class Liste extends ArrayList <Float>  {
+class StringListe extends ArrayList <String>  {
 
 
     /** Constructor */
-    Liste (){
+    StringListe(){
     };
 
     /*
@@ -29,7 +27,7 @@ class Liste extends ArrayList <Float>  {
      * gibt Liste zurück
      * @return Liste
      */
-    public Liste getList (){
+    public StringListe getList (){
         return this;
     }
 }

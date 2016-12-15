@@ -49,6 +49,8 @@ public class Datasource {
     public Datasource(Context context) {
         Log.d(LOG_TAG, "Unsere DataSource erzeugt jetzt den DatabaseHelper.");
         databaseHelper = new DatabaseHelper(context);
+        database= databaseHelper.getWritableDatabase();
+
     }
     /* Callback-Methoden open() und close() */
     public void open() {

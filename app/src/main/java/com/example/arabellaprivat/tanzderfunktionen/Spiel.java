@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * hier fidet das Spiel / das Zeichnen statt
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 public class Spiel extends AppCompatActivity {
 
     // IV
+    MainActivity m = new MainActivity();
     /** Info-Button */
     private Button b_info;
     /** Button zum Löschen der View */
@@ -54,7 +56,9 @@ public class Spiel extends AppCompatActivity {
 
     // Liste für die Werte aus der Datenbank
     // Liste mit Parametern für die Funktionen
-    // Liste für
+    Liste paramterList = new Liste();
+    // Liste für Texte für die Funktion
+    StringListe textList= new StringListe();
 
 
     @Override
@@ -85,6 +89,10 @@ public class Spiel extends AppCompatActivity {
         h= (Hilfspunkte) findViewById (R.id.hilfspunkte);
         b_zeichnen=(Button) findViewById(R.id.zeichnen);
 
+        // Listen mit aktuellen Level füllen
+        paramterList=m.getParameterList(level);
+        textList=m.getTextList(level);
+
         // Text reinschreiben
         t_bewertung.setText("Bitte zeichne deine Hilfspunkte ein");
         //  Weiter Button ist erstmal unsichtbar
@@ -92,10 +100,8 @@ public class Spiel extends AppCompatActivity {
         // auch eigentliche View zum Zeichnen der Funktion sowie der Überprüfungsbutton sind unsichtbar
         z.setVisibility(View.INVISIBLE);
         b_pruefen.setVisibility(View.INVISIBLE);
-
-        // TODO zeigen, in welchem Level wir sind
+        //anzeigen in welchen Level wir sind
         t_level.setText("Level " + level);
-
 
         // Kreise zur Anzeige, wie die Level absolviert wurden
         this.punkteanzeigeZeichnen();
@@ -103,7 +109,8 @@ public class Spiel extends AppCompatActivity {
         // TODO Name der Funktion anzeigen
         // indem die Funktion aus der Datenbank geholt wird
         // t_funktion.setText(SELECT funktion FROM Level WHERE Level = (SELECT Level FROM Nutzer));
-        t_funktion.setText(String.valueOf(level));
+       // t_funktion.setText(level);
+         t_funktion.setText(String.valueOf(textList.get(0)));
 		// Überprüfung der Liste
 		// String text = " ";
 		// for(int i=1; i<=5; i++){
@@ -301,4 +308,5 @@ public class Spiel extends AppCompatActivity {
             }
         }
     }
+
 }
