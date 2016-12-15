@@ -10,11 +10,6 @@ import java.util.ArrayList;
 
 /**
  * in dieser Klasse wird das Level ausgweählt
- * Anmerkungen / zu erledigen:
- * evtl. lieber die Funktionen als die Level auswählen
- * oder zu Anleitung / Start / Tipps navigieren
- * da es sonst Probleme mit der Endbewertung geben könnte
- * onClick()-Methoden ggf. zusammenfassen, wg. Code-Duplikation
  */
 public class Menu extends AppCompatActivity {
 
@@ -25,6 +20,8 @@ public class Menu extends AppCompatActivity {
     private Button b_level_3;
     private Button b_level_4;
     private Button b_level_5;
+    /** schließt die Activity */
+    private Button b_close;
     /** übergibt dasausgewählte Level der Spiel Activity */
     private Bundle b_new = new Bundle();
     private ArrayList<Integer> levelpoints;
@@ -35,10 +32,10 @@ public class Menu extends AppCompatActivity {
         setContentView(R.layout.activity_menu);
 
         // Intent, das diese Activity geöffnet hat holen
-        Intent i_alt = getIntent();
-        Bundle b_alt = i_alt.getExtras();
+        Intent i_old = getIntent();
+        Bundle b_old = i_old.getExtras();
         // daraus die übergebenen Daten holen
-        this.levelpoints = b_alt.getIntegerArrayList("Punkte");
+        this.levelpoints = b_old.getIntegerArrayList("Punkte");
 
         // Variablen belegen
         b_level_1 = (Button) findViewById(R.id.level_1);
@@ -46,6 +43,7 @@ public class Menu extends AppCompatActivity {
         b_level_3 = (Button) findViewById(R.id.level_3);
         b_level_4 = (Button) findViewById(R.id.level_4);
         b_level_5 = (Button) findViewById(R.id.level_5);
+        b_close = (Button) findViewById(R.id.close);
 
         b_level_1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,6 +84,12 @@ public class Menu extends AppCompatActivity {
             public void onClick(View v) {
                 b_new.putInt("Level", 5);
                 sendMessage(v);
+            }
+        });
+        b_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
     }

@@ -11,8 +11,14 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.arabellaprivat.tanzderfunktionen.Spiel">
 
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/functionText"
+        android:layout_above="@+id/score" />
+
     <TextView
-        android:id="@+id/funktion"
+        android:id="@+id/functionText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAlignment="center"
@@ -21,7 +27,7 @@
         android:layout_centerHorizontal="true" />
 
     <Button
-        android:id="@+id/pruefen"
+        android:id="@+id/check"
         android:text="Prüfen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -29,7 +35,7 @@
         android:textAllCaps="false"
         android:layout_marginBottom="164dp"
         android:layout_alignParentBottom="true"
-        android:layout_toEndOf="@+id/funktion"
+        android:layout_toEndOf="@+id/functionText"
         android:layout_marginStart="33dp" />
 
     <Button
@@ -53,15 +59,15 @@
         android:layout_marginLeft="10dp" />
 
     <Button
-        android:id="@+id/loeschen"
+        android:id="@+id/delete"
         android:text="Löschen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="25sp"
         android:textAllCaps="false"
-        android:layout_alignBaseline="@+id/pruefen"
-        android:layout_alignBottom="@+id/pruefen"
-        android:layout_toStartOf="@+id/funktion"
+        android:layout_alignBaseline="@+id/check"
+        android:layout_alignBottom="@+id/check"
+        android:layout_toStartOf="@+id/functionText"
         android:layout_marginEnd="46dp" />
 
     <Button
@@ -69,38 +75,38 @@
         android:text="Menü"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/funktion"
+        android:layout_alignBottom="@+id/functionText"
         android:layout_alignParentEnd="true"
         android:textAllCaps="false"
         android:textSize="15sp" />
 
     <TextView
-        android:id="@+id/bewertung"
+        android:id="@+id/review"
         android:text="TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/pruefen"
+        android:layout_above="@+id/check"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="75dp"
         android:textSize="15sp"
         android:textAllCaps="true" />
 
     <Button
-        android:id="@+id/weiter"
+        android:id="@+id/next"
         android:text="Weiter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/bewertung"
+        android:layout_below="@+id/review"
         android:layout_centerHorizontal="true"
         android:textSize="25sp"
         android:textAllCaps="false" />
 
     <ImageView
-        android:id="@+id/punkteanzeige"
+        android:id="@+id/score"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:srcCompat="@mipmap/ic_launcher"
-        android:layout_below="@+id/funktion"
+        android:layout_below="@+id/functionText"
         android:layout_alignParentStart="true"
          />
 
@@ -123,7 +129,7 @@
         />
 
     <Button
-        android:id="@+id/zeichnen"
+        android:id="@+id/draw"
         android:text="Fertig"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -131,7 +137,7 @@
         android:textAllCaps="false"
         android:layout_marginBottom="164dp"
         android:layout_alignParentBottom="true"
-        android:layout_toEndOf="@+id/funktion"
+        android:layout_toEndOf="@+id/functionText"
         android:layout_marginStart="33dp" />
 
 

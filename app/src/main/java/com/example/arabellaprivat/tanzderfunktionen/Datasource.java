@@ -26,17 +26,16 @@ public class Datasource {
     private String[] columns_complete_1 = {
             DatabaseHelper.LEVEL_LEVEL,
             DatabaseHelper.FUNKTION,
+            DatabaseHelper.TIPP,
             DatabaseHelper.PARAMETER_1,
             DatabaseHelper.PARAMETER_2,
             DatabaseHelper.PARAMETER_3,
+            DatabaseHelper.PARAMETER_4,
+            DatabaseHelper.NULLSTELLE_1,
+            DatabaseHelper.NULLSTELLE_2,
+            DatabaseHelper.ACHSENABSCHNITT,
             DatabaseHelper.MIN,
-            DatabaseHelper.MAX,
-            DatabaseHelper.TIPP
-    };
-    //Spalte mit dem AusgabeText den wir ausgeben lassen wollen aus Tabelle 2
-    private String[] columns_complete_2 = {
-            DatabaseHelper.AUSGABE_TEXT
-    };
+            DatabaseHelper.MAX};
 
     //Selection und SelectionArgs ( WHERE BEDINGUNG )
     String selection = DatabaseHelper.LEVEL_LEVEL + " = ?";
@@ -57,7 +56,6 @@ public class Datasource {
         Log.d(LOG_TAG, "Eine Referenz auf die Datenbank wird jetzt angefragt.");
         //Verbindung zur DB herstellen
         database = databaseHelper.getWritableDatabase();
-        //database = databaseHelper.getReadableDatabase();
         Log.d(LOG_TAG, "Datenbank-Referenz erhalten. Pfad zur Datenbank: " + database.getPath());
     }
 
@@ -76,23 +74,32 @@ public class Datasource {
         //auslesen der Indizes
         int idLevel = cursor.getColumnIndex(DatabaseHelper.LEVEL_LEVEL);
         int idFunktion = cursor.getColumnIndex(DatabaseHelper.FUNKTION);
+        int id_tipp = cursor.getColumnIndex(DatabaseHelper.TIPP);
         int idP_1 = cursor.getColumnIndex(DatabaseHelper.PARAMETER_1);
         int idP_2 = cursor.getColumnIndex(DatabaseHelper.PARAMETER_2);
         int idP_3 = cursor.getColumnIndex(DatabaseHelper.PARAMETER_3);
+        int idP_4 = cursor.getColumnIndex(DatabaseHelper.PARAMETER_4);
+        int id_x2 = cursor.getColumnIndex(DatabaseHelper.NULLSTELLE_1);
+        int id_x1 = cursor.getColumnIndex(DatabaseHelper.NULLSTELLE_2);
+        int id_y = cursor.getColumnIndex(DatabaseHelper.ACHSENABSCHNITT);
         int id_min = cursor.getColumnIndex(DatabaseHelper.MIN);
         int id_max = cursor.getColumnIndex(DatabaseHelper.MAX);
-        int id_tipp = cursor.getColumnIndex(DatabaseHelper.TIPP);
         //Suchanfragen ausgeben lassen
         int level = cursor.getInt(idLevel);
         String funktion = cursor.getString(idFunktion);
+        String tipp = cursor.getString(id_tipp);
         float p_1 = cursor.getFloat(idP_1);
-        float p_2 = cursor.getInt(idP_2);
-        float p_3 = cursor.getInt(idP_3);
+        float p_2 = cursor.getFloat(idP_2);
+        float p_3 = cursor.getFloat(idP_3);
+        float p_4 = cursor.getFloat(idP_4);
+        float x1 = cursor.getFloat(id_x1);
+        float x2 = cursor.getFloat(id_x2);
+        float y = cursor.getFloat(id_y);
         int min = cursor.getInt(id_min);
         int max = cursor.getInt(id_max);
-        String tipp = cursor.getString(id_tipp);
+
         //DatabaseTable_1 Objekt erzeugen mitHilfe der ausgelesenen Daten
-        DatabaseTable_1 tabelle_1 = new DatabaseTable_1(level,funktion,p_1,p_2,p_3,min,max,tipp);
+        DatabaseTable_1 tabelle_1 = new DatabaseTable_1(level,funktion,tipp,p_1,p_2,p_3,p_4,x1,x2,y,min,max);
 
         return tabelle_1;
     }
@@ -127,7 +134,7 @@ public class Datasource {
 
     /**Methode
      * liest Spalte 1 aus Tabelle aus
-     * @return
+     * @return Liste mit Daten der Spalte 1
      */
     public List<DatabaseTable_1> getColumnOne() {
         //Liste, die DatabaseTable_1-Objekt aufnehmen kann
@@ -155,7 +162,7 @@ public class Datasource {
 
     /**Methode
      * liest Spalte 2 aus Tabelle aus
-     * @return
+     * @return Liste mit Daten der Spalte 2
      */
     public List<DatabaseTable_1> getColumnTwo() {
         //Liste, die DatabaseTable_1-Objekt aufnehmen kann
@@ -183,7 +190,7 @@ public class Datasource {
 
     /**Methode
      * liest alle Spalte 3 aus Tabelle aus
-     * @return
+     * @return Liste mit Daten der Spalte 3
      */
     public List<DatabaseTable_1> getColumnThree() {
         //Liste, die DatabaseTable_1-Objekt aufnehmen kann
@@ -211,7 +218,7 @@ public class Datasource {
 
     /**Methode
      * liest alle Spalte 4 aus Tabelle aus
-     * @return
+     * @return Liste mit Daten der Spalte 4
      */
     public List<DatabaseTable_1> getColumnFour() {
         //Liste, die DatabaseTable_1-Objekt aufnehmen kann
@@ -239,7 +246,7 @@ public class Datasource {
 
     /**Methode
      * liest alle Spalte 5 aus Tabelle aus
-     * @return
+     * @return Liste mit Daten der Spalte 5
      */
     public List<DatabaseTable_1> getColumnFive() {
         //Liste, die DatabaseTable_1-Objekt aufnehmen kann
@@ -264,49 +271,4 @@ public class Datasource {
         //erzeugte DatabaseTable_1-Liste an die aufrufende Methode zurückgeben
         return db_5_List;
     }
-
-    /**Methode
-     * wandelt ein Cursor-Objekt in ein DatabaseTable_2-Objekt um
-     * @param cursor
-     * @return
-     */
-    private DatabaseTable_2 cursorToDatabaseTable_2(Cursor cursor) {
-        //auslesen der Indizes
-        int idText = cursor.getColumnIndex(DatabaseHelper.AUSGABE_TEXT);
-        //Suchanfragen ausgeben lassen
-        String text = cursor.getString(idText);
-        //DatabaseTable_1 Objekt erzeugen mitHilfe der ausgelesenen Daten
-        DatabaseTable_2 tabelle_2 = new DatabaseTable_2(text);
-
-        return tabelle_2;
-    }
-
-    /**Methode
-     * liest alle vorhandenen Datensätze aus Tabelle 1 aus
-     * @return
-     */
-    public List<DatabaseTable_2> getAusgabeText() {
-        //Liste, die DatabaseTable_1-Objekt aufnehmen kann
-        List<DatabaseTable_2> db_ausgabeText = new ArrayList<>();
-        //Suchanfrage, dritte stelle null, also alle Datensätze auslesen
-        //query(db,spalten,selection,selectionsArgs,groupy,having,orderBy
-        Cursor cursor_all = database.query(DatabaseHelper.DB_TABLE_2,
-                columns_complete_2, null, null, null, null, null);
-
-        cursor_all.moveToFirst();
-        DatabaseTable_2 databaseTable_2;
-        //alle Datensätze auslesen und in DatabaseTable_1-Objekte umwandeln
-        //und der Liste hinzufuegen
-        while(!cursor_all.isAfterLast()) {
-            databaseTable_2 = cursorToDatabaseTable_2(cursor_all);
-            db_ausgabeText.add(databaseTable_2);
-            Log.d(LOG_TAG, " Inhalt der Tabelle 1: " + databaseTable_2.toString());
-            cursor_all.moveToNext();
-        }
-        //Suchanfrage schließen
-        cursor_all.close();
-        //erzeugte DatabaseTable_1-Liste an die aufrufende Methode zurückgeben
-        return db_ausgabeText;
-    }
-
 }
